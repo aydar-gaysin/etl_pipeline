@@ -195,39 +195,6 @@ def load_data(
             pg_connection.commit()
 
 
-def create_tables(
-        pg_connection: psycopg2_utils.Connection,
-        sqlite_dataclass: collections_abc.Iterator[T],
-        table_name,
-) -> None:
-    with pg_connection.cursor() as cursor:
-        field_names = [datafield.name for datafield in dataclasses.fields(
-            sqlite_dataclass)]
-        cursor.execute(
-            """CREATE TABLE IF NOT EXISTS test.genre (
-                id uuid PRIMARY KEY,
-                name TEXT NOT NULL,
-                description TEXT,
-                created TIMESTAMP WITH TIME ZONE,
-                modified TIMESTAMP WITH TIME ZONE
-                )
-            """
-        )
-    pg_connection.commit()
-
-
-def truncate_tables(connection: psycopg2_utils.Connection) -> None:
-    with connection.cursor() as cursor:
-        cursor.execute("TRUNCATE users")
-    connection.commit()
-
-
-def drop_tables(connection: psycopg2_utils.Connection) -> None:
-    with connection.cursor() as cursor:
-        cursor.execute("TRUNCATE users")
-    connection.commit()
-
-
 TABLES_DATACLASSES_MATCH = {
     'genre': Genre,
     # 'person': Person,
